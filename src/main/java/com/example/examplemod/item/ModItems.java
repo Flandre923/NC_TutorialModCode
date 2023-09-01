@@ -12,10 +12,8 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,
             ExampleMod.MODID);
 
-
     public static final RegistryObject<Item> COMPASS_ITEM = ITEMS.register("naturescompass",()->
             new CompassItem(new Item.Properties()));
-
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
