@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "naturescompass:item/naturescompass_19"
+        "layer0": "examplemod:item/naturescompass_19"
     }
 }
