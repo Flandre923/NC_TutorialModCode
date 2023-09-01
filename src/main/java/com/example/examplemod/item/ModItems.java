@@ -1,6 +1,7 @@
 package com.example.examplemod.item;
 
 import com.example.examplemod.ExampleMod;
+import com.example.examplemod.item.custom.NaturesCompassItem;
 import net.minecraft.world.item.CompassItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,7 +14,7 @@ public class ModItems {
             ExampleMod.MODID);
 
     public static final RegistryObject<Item> COMPASS_ITEM = ITEMS.register("naturescompass",()->
-            new CompassItem(new Item.Properties()));
+            new NaturesCompassItem(new Item.Properties()));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
