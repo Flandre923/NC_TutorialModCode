@@ -49,31 +49,10 @@ public class ExampleMod
 
         ModItems.register(modEventBus);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->{
-            //
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
-        });
 
         MinecraftForge.EVENT_BUS.register(this);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::buildCreativeTabContents);
     }
 
-    private void buildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
-            event.accept(ModItems.COMPASS_ITEM);
-        }
-    }
-    @OnlyIn(Dist.CLIENT)
-    public void clientInit(FMLClientSetupEvent event){
-        event.enqueueWork(()->{
-            ItemProperties.register(ModItems.COMPASS_ITEM.get(), new ResourceLocation("angle"), new ClampedItemPropertyFunction() {
-                @Override
-                public float unclampedCall(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int seed) {
-                    return .203125f;
-                }
-            });
-        });
-    }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -91,6 +70,12 @@ public class ExampleMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            ItemProperties.register(ModItems.COMPASS_ITEM.get(), new ResourceLocation("angle"), new ClampedItemPropertyFunction() {
+                @Override
+                public float unclampedCall(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int seed) {
+                    return .203125f;
+                }
+            });
         }
     }
 }
