@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -13,8 +14,12 @@ import net.minecraft.world.level.Level;
 public class NaturesCompassScrren extends Screen {
 
 
-    private Button button;
-    private EditBox editBox;
+    private Button cancelButton;
+    private Button sortByButton;
+    private Button startSearchButton;
+    private Button teleportButton;
+    private EditBox searchTextField;
+
     public NaturesCompassScrren(Level level, Player player, ItemStack itemStack, Item item) {
         super(Component.literal("select biome"));
     }
@@ -33,11 +38,22 @@ public class NaturesCompassScrren extends Screen {
 
     private void setupWidgets(){
         clearWidgets();
-        button =  addRenderableWidget(new TransaprentButton(10,height-30,110,20,Component.literal("button"),(onPress)->{
+        cancelButton =  addRenderableWidget(new TransaprentButton(10,height-30,110,20,Component.literal("cancel"),(onPress)->{
             minecraft.setScreen(null);
         }));
 
+        sortByButton = addRenderableWidget(new TransaprentButton(10, 65, 110, 20, Component.literal("sort"), (onPress) -> {
+            sortByButton.setMessage(Component.literal("整理"));
+        }));
+        startSearchButton = addRenderableWidget(new TransaprentButton(10, 40, 110, 20, Component.literal("start search"), (onPress) -> {
 
-        editBox = addRenderableWidget(new EditBox(font,130,10,140,20,Component.literal("editor")));
+        }));
+        teleportButton = addRenderableWidget(new TransaprentButton(width - 120, 10, 110, 20, Component.literal("teleport"), (onPress) -> {
+
+        }));
+
+
+
+        searchTextField = addRenderableWidget(new EditBox(font,130,10,140,20,Component.literal("editor")));
     }
 }
