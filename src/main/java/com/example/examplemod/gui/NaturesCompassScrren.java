@@ -19,7 +19,7 @@ public class NaturesCompassScrren extends Screen {
     private Button startSearchButton;
     private Button teleportButton;
     private EditBox searchTextField;
-//    private BiomeSearchList selectionList;
+    private BiomeSearchList selectionList;
 
 
     public NaturesCompassScrren(Level level, Player player, ItemStack itemStack, Item item) {
@@ -54,12 +54,12 @@ public class NaturesCompassScrren extends Screen {
 
         }));
 
-//
-//        if (selectionList == null) {
-//            selectionList = new BiomeSearchList(this, minecraft, width + 110, height, 40, height, 45);
-//        }
-//        addRenderableWidget(selectionList);
 
-        searchTextField = addRenderableWidget(new EditBox(font,130,10,140,20,Component.literal("editor")));
+        if (selectionList == null) {
+            selectionList = new BiomeSearchList(this, minecraft, width + 110, height, 40, height, 45);
+        }
+        addRenderableWidget(selectionList);
+
+        searchTextField = addRenderableWidget(new TransparentTextField(font,130,10,140,20,Component.literal("editor")));
     }
 }
