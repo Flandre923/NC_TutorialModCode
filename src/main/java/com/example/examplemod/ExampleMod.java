@@ -1,6 +1,9 @@
 package com.example.examplemod;
 
 import com.example.examplemod.item.ModItems;
+import com.example.examplemod.network.MyChannel;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -36,18 +39,30 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod(ExampleMod.MODID)
 public class ExampleMod
 {
     public static final String MODID = "examplemod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    // 是否能传送 客户端从这里读数据
+    public static boolean canTeleport;
+    // 生物群系
+    public static List<ResourceLocation> allowedBiomes;
+    public static ListMultimap<ResourceLocation, ResourceLocation> dimensionKeysForAllowedBiomeKeys;
+
     public ExampleMod()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
 
+        // 物品注册
         ModItems.register(modEventBus);
+        // 网络
+        MyChannel.register();
 
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -56,6 +71,9 @@ public class ExampleMod
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        // 初始化数据
+        allowedBiomes = new ArrayList<ResourceLocation>();
+        dimensionKeysForAllowedBiomeKeys = ArrayListMultimap.create();
     }
 
 

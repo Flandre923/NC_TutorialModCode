@@ -4,9 +4,12 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-
+@OnlyIn(Dist.CLIENT)
 public class TransparentTextField extends EditBox {
+    // 输入框
     private Font font;
     private Component label;
     public TransparentTextField(Font font, int x, int y, int width, int height, Component label) {
@@ -15,8 +18,4 @@ public class TransparentTextField extends EditBox {
         this.label = label;
     }
 
-    @Override
-    public void render(GuiGraphics p_282421_, int p_93658_, int p_93659_, float p_93660_) {
-        super.render(p_282421_, p_93658_, p_93659_, p_93660_);
-    }
 }
