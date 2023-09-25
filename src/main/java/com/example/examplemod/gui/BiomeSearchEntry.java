@@ -1,6 +1,7 @@
 package com.example.examplemod.gui;
 
 import com.example.examplemod.util.BiomeUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -17,7 +18,6 @@ public class BiomeSearchEntry extends ObjectSelectionList.Entry<BiomeSearchEntry
     private final NaturesCompassScrren parentScreen;
     private final Biome biome;
     private final BiomeSearchList biomesList;
-//    private final String tags;
     private long lastClickTime;
     public BiomeSearchEntry(BiomeSearchList biomesList, Biome biome) {
         this.biomesList = biomesList;
@@ -25,7 +25,15 @@ public class BiomeSearchEntry extends ObjectSelectionList.Entry<BiomeSearchEntry
         parentScreen = biomesList.getParentScreen();
         mc = Minecraft.getInstance();
     }
-
+    // 当选项被点击时候回调
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            // 选中
+            biomesList.selectBiome(this);
+        }
+        return false;
+    }
     @Override
     public Component getNarration() {
         return Component.literal("hello");
@@ -37,6 +45,6 @@ public class BiomeSearchEntry extends ObjectSelectionList.Entry<BiomeSearchEntry
     @Override
     public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int par6, int par7, boolean par8, float par9) {
         guiGraphics.drawString(mc.font, Component.literal(BiomeUtils.getBiomeNameForDisplay(parentScreen.level, biome)), left + 1, top + 1, 0xffffff);
-
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -92,6 +92,19 @@ public class NaturesCompassScrren extends Screen {
         return biomes;
     }
 
+    // 添加一下选中列表项的功能
+    // 该方法用于鼠标在screen上滚动时候，滚动list
+    @Override
+    public boolean mouseScrolled(double scroll1, double scroll2, double scroll3) {
+        return selectionList.mouseScrolled(scroll1, scroll2, scroll3);
+    }
+    // 该方法用于选中时候将 搜索button设置为可用
+    public void selectBiome(BiomeSearchEntry entry) {
+        boolean enable = entry != null;
+        startSearchButton.active = enable;
+    }
+
+
     // 当数据不一致时候需要对列表进行刷新，因为网路是一个异步的操作。有可能服务器发的数据还没到，界面及打开了，需要对list进行刷新
     @Override
     public void tick() {
@@ -107,10 +120,6 @@ public class NaturesCompassScrren extends Screen {
         }
     }
 
-    public void selectBiome(BiomeSearchEntry entry) {
-        boolean enable = entry != null;
-        startSearchButton.active = enable;
-    }
 
     private void loadAllowedBiomes(List<ResourceLocation> allowedBiomeKeys) {
         this.allowedBiomes = new ArrayList<Biome>();
