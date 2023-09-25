@@ -4,10 +4,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import net.minecraft.Util;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.core.Registry;
@@ -127,4 +130,18 @@ public class BiomeUtils {
         return "";
     }
 
+    // 计算玩家到x，z的距离
+    public static int getDistanceToBiome(Player player, int biomeX, int biomeZ) {
+        return getDistanceToBiome(player.blockPosition(), biomeX, biomeZ);
+    }
+
+    // 计算startpos 距离 x,z的距离
+    public static int getDistanceToBiome(BlockPos startPos, int biomeX, int biomeZ) {
+        return (int) Mth.sqrt((float) startPos.distSqr(new BlockPos(biomeX, startPos.getY(), biomeZ)));
+    }
+
+    public static int getBiomeSize(Level world) {
+        // TODO
+        return 4;
+    }
 }

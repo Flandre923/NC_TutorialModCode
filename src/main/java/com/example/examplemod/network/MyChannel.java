@@ -1,6 +1,7 @@
 package com.example.examplemod.network;
 
 import com.example.examplemod.ExampleMod;
+import com.example.examplemod.network.packet.CompassSearchPacket;
 import com.example.examplemod.network.packet.SyncPacket;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +19,12 @@ public class MyChannel {
 
         INSTANCE = channel;
 
+        //Server packet
+        INSTANCE.registerMessage(0, CompassSearchPacket.class, CompassSearchPacket::toBytes, CompassSearchPacket::new, CompassSearchPacket::handle);
+
         // Client packet
         INSTANCE.registerMessage(2, SyncPacket.class, SyncPacket::toBytes, SyncPacket::new, SyncPacket::handle);
+
     }
 
     public <MSG> void sendToPlayer(MSG message,Connection player){

@@ -5,7 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +40,11 @@ public class BiomeSearchEntry extends ObjectSelectionList.Entry<BiomeSearchEntry
     public Component getNarration() {
         return Component.literal("hello");
     }
-
+    // 搜索
+    public void searchForBiome() {
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        parentScreen.searchForBiome(biome);
+    }
     // 这render方法就是表示了这个列表中的一个选项的显示的内容
     // 分别是字体，内容，位置，和颜色
     // 0xffffff 白色。RGB

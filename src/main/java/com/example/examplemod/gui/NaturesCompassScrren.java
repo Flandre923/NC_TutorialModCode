@@ -1,6 +1,8 @@
 package com.example.examplemod.gui;
 
 import com.example.examplemod.ExampleMod;
+import com.example.examplemod.network.MyChannel;
+import com.example.examplemod.network.packet.CompassSearchPacket;
 import com.example.examplemod.util.BiomeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class NaturesCompassScrren extends Screen {
+    private Player player;
     public Level level;
     private List<Biome> allowedBiomes;
     private List<Biome> biomesMatchingSearch;
@@ -39,6 +42,7 @@ public class NaturesCompassScrren extends Screen {
     public NaturesCompassScrren(Level level, Player player, ItemStack itemStack, Item item, List<ResourceLocation> allowedBiomes) {
         super(Component.literal("select biome"));
         this.level = level;
+        this.player = player;
         // 初始化时候传递数据
         this.allowedBiomes = new ArrayList<Biome>();
         loadAllowedBiomes(allowedBiomes);
@@ -70,8 +74,12 @@ public class NaturesCompassScrren extends Screen {
         sortByButton = addRenderableWidget(new TransaprentButton(10, 65, 110, 20, Component.literal("sort"), (onPress) -> {
             sortByButton.setMessage(Component.literal("整理"));
         }));
+        // 开始搜索按钮
         startSearchButton = addRenderableWidget(new TransaprentButton(10, 40, 110, 20, Component.literal("start search"), (onPress) -> {
-
+            // 按钮回调
+            if (selectionList.hasSelection()) {
+                selectionList.getSelected().searchForBiome();
+            }
         }));
         teleportButton = addRenderableWidget(new TransaprentButton(width - 120, 10, 110, 20, Component.literal("teleport"), (onPress) -> {
 
@@ -86,6 +94,13 @@ public class NaturesCompassScrren extends Screen {
         searchTextField = addRenderableWidget(new TransparentTextField(font,130,10,140,20,Component.literal("editor")));
     }
 
+    // 搜索生物群系
+    public void searchForBiome(Biome biome) {
+        if (BiomeUtils.getKeyForBiome(level, biome).isPresent()) {
+            MyChannel.INSTANCE.sendToServer(new CompassSearchPacket(BiomeUtils.getKeyForBiome(level, biome).get(), player.blockPosition()));
+        }
+        minecraft.setScreen(null);
+    }
     public List<Biome> sortBiomes() {
         final List<Biome> biomes = biomesMatchingSearch;
 

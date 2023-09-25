@@ -14,7 +14,7 @@ public class ModItems {
             ExampleMod.MODID);
 
     public static final RegistryObject<Item> COMPASS_ITEM = ITEMS.register("naturescompass",()->
-            new NaturesCompassItem(new Item.Properties()));
+            new NaturesCompassItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
