@@ -135,7 +135,8 @@ public class BiomeSearchWorker implements WorldWorkerManager.IWorker {
         if (!stack.isEmpty() && stack.getItem() == ModItems.COMPASS_ITEM.get()) {
             // 成功后会打印半径，和x，z坐标 这里先这样展示，之后我们根据这个x，z坐标和玩家的坐标以及玩家朝向计算指南针的指针方向
             ExampleMod.LOGGER.info("position x: " + x + " z: "+z);
-//            ((NaturesCompassItem) stack.getItem()).succeed(stack, player, x, z, samples, ConfigHandler.GENERAL.displayCoordinates.get());
+            // 搜索成功的时候调用 ，并传入xz坐标
+            ((NaturesCompassItem) stack.getItem()).succeed(stack, player, x, z, samples, true);
         } else {
             ExampleMod.LOGGER.error("Invalid compass after search");
         }
@@ -145,7 +146,8 @@ public class BiomeSearchWorker implements WorldWorkerManager.IWorker {
     private void fail() {
         ExampleMod.LOGGER.info("Search failed: " + getRadius() + " radius, " + samples + " samples");
         if (!stack.isEmpty() && stack.getItem() == ModItems.COMPASS_ITEM.get()) {
-//            ((NaturesCompassItem) stack.getItem()).fail(stack, player, roundRadius(getRadius(), 500), samples);
+            // 失败时候调用失败的。
+            ((NaturesCompassItem) stack.getItem()).fail(stack, player, roundRadius(getRadius(), 500), samples);
         } else {
             ExampleMod.LOGGER.error("Invalid compass after search");
         }

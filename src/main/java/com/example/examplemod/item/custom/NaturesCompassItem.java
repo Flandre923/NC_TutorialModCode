@@ -7,6 +7,8 @@ import com.example.examplemod.network.MyChannel;
 import com.example.examplemod.network.packet.SyncPacket;
 import com.example.examplemod.util.BiomeSearchWorker;
 import com.example.examplemod.util.BiomeUtils;
+import com.example.examplemod.util.CompassState;
+import com.example.examplemod.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -60,16 +62,64 @@ public class NaturesCompassItem extends Item {
         }
         return new InteractionResultHolder<>(InteractionResult.PASS,player.getItemInHand(hand));
     }
-
+    // 其余的代码就是一个，表示搜索的过程，是否开始搜索，是否搜索成功
     // 之后存NBT数据，用与之后的操作
+    // 搜索是存储当前搜索的key和更改状态为
     public void setSearching(ItemStack stack, ResourceLocation biomeKey, Player player) {
-        if (stack.isEmpty() || stack.getItem() != ModItems.COMPASS_ITEM.get()) {
-            return;
-        } else if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
+        // 获得nbt ， 将key 和  state状态放进入
+        if (ItemUtils.verifyNBT(stack)) {
+            stack.getTag().putString("BiomeKey", biomeKey.toString());
+            stack.getTag().putInt("State", CompassState.SEARCHING.getID());
         }
-//        stack.getTag().putString("BiomeKey", biomeKey.toString());
-//        stack.getTag().putInt("State", CompassState.SEARCHING.getID());
+    }
+    // 搜索成功的时候
+    public void succeed(ItemStack stack, Player player, int x, int z, int samples, boolean displayCoordinates) {
+        setFound(stack, x, z, samples, player);
+        setDisplayCoordinates(stack, displayCoordinates);
+        worker = null;
+    }
+    // 失败
+    public void fail(ItemStack stack, Player player, int radius, int samples) {
+        setNotFound(stack, player, radius, samples);
+        worker = null;
+    }
+    // 存入xz坐标，更改state状态
+    public void setFound(ItemStack stack, int x, int z, int samples, Player player) {
+        if (ItemUtils.verifyNBT(stack)) {
+            stack.getTag().putInt("State", CompassState.FOUND.getID());
+            stack.getTag().putInt("FoundX", x);
+            stack.getTag().putInt("FoundZ", z);
+            stack.getTag().putInt("Samples", samples);
+        }
+    }
+    // 大同效益
+    public void setNotFound(ItemStack stack, Player player, int searchRadius, int samples) {
+        if (ItemUtils.verifyNBT(stack)) {
+            stack.getTag().putInt("State", CompassState.NOT_FOUND.getID());
+            stack.getTag().putInt("SearchRadius", searchRadius);
+            stack.getTag().putInt("Samples", samples);
+        }
+    }
+    // 好吧这里是是否展示position不是停掉work，work在搜索到之后就停了
+    public void setDisplayCoordinates(ItemStack stack, boolean displayPosition) {
+        if (ItemUtils.verifyNBT(stack)) {
+            stack.getTag().putBoolean("DisplayCoordinates", displayPosition);
+        }
+    }
+    public int getFoundBiomeX(ItemStack stack) {
+        if (ItemUtils.verifyNBT(stack)) {
+            return stack.getTag().getInt("FoundX");
+        }
+
+        return 0;
+    }
+
+    public int getFoundBiomeZ(ItemStack stack) {
+        if (ItemUtils.verifyNBT(stack)) {
+            return stack.getTag().getInt("FoundZ");
+        }
+
+        return 0;
     }
 
 
@@ -86,5 +136,12 @@ public class NaturesCompassItem extends Item {
             worker = new BiomeSearchWorker(level, player, stack, optionalBiome.get(), pos);
             worker.start();
         }
+    }
+
+    public CompassState getState(ItemStack stack) {
+        if (ItemUtils.verifyNBT(stack)) {
+            return CompassState.fromID(stack.getTag().getInt("State"));
+        }
+        return null;
     }
 }

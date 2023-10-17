@@ -57,6 +57,7 @@ public class CompassSearchPacket {
 
             if (!stack.isEmpty()) {
                 final NaturesCompassItem natureCompass = (NaturesCompassItem) stack.getItem();
+                // 开始搜索
                 natureCompass.searchForBiome(ctx.get().getSender().serverLevel(), ctx.get().getSender(), biomeKey, new BlockPos(x, y, z), stack);
             }
         });
